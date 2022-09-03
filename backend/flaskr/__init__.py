@@ -73,6 +73,7 @@ def create_app(test_config=None):
                 'categories': categories, 
                 'total_questions': len(Question.query.all()),
                 'questions':current_questions,
+                'currentCategory':'History'
             })
 
 
