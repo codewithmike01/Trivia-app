@@ -50,7 +50,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
 
-    def test_get_pagination_beyound_questions(self):
+    def test_get_pagination_beyound_questions_404(self):
         res = self.client().get('/questions?page=2000')
         data = json.loads(res.data)
 
@@ -60,9 +60,11 @@ class TriviaTestCase(unittest.TestCase):
         
     def test_delete_question(self):
         res = self.client().delete('/questions/2')
-
+      
         question = Question.query.filter( Question.id == 2).one_or_none()
         self.assertEqual(question, None)
+     
+      
 
     def test_create_question(self):
         res = self.client().post('/questions', json={'question':'Heres a new question string', 'answer': 'Here a new answer string','difficulty':1,'category':3})
@@ -70,6 +72,16 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+        
+
+    
+    def test_404_sent_requesting_beyond_valid_page(self):
+        res = self.client().get('/questions?page=1000', json={'answer': 'Impossible'})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Not found')
 
 
 
