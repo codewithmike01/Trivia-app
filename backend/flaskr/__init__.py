@@ -64,7 +64,7 @@ def create_app(test_config=None):
         selection = Question.query.order_by(Question.id).all()
         current_questions = paginate_questions(request, selection)
         categories = get_categories_func()
-        
+
         if len(current_questions) == 0:
             abort(404)
         else:
@@ -143,7 +143,7 @@ def create_app(test_config=None):
     @app.route('/quizzes', methods=['POST'])
     def get_rand_quiz():
         body = request.get_json()
-        print('Hello here')
+     
         prev_questions = body.get('previous_questions',None) 
         quizz_cat = body.get('quiz_category',None)
        
